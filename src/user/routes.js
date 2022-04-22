@@ -5,6 +5,6 @@ const userRouter = Router();
 
 userRouter.post("/user", hashPass, addUser);
 userRouter.post("/login", unHash, login);
-userRouter.get("/user, decrypt, login");
+userRouter.get("/user", decrypt, login);
 
 module.exports = userRouter;

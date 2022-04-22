@@ -8,7 +8,7 @@ exports.hashPass = async (req, res, next) => {
     //    const hashedPass = await bcrypt.hash(pass, 8)
     //    req.body.pass = hashedPass
 
-    req.body.pass = await bcrypt.hash(req.body.password, 8);
+    req.body.password = await bcrypt.hash(req.body.password, 8);
     next();
   } catch (error) {
     console.log(error);
@@ -21,7 +21,7 @@ exports.unHash = async (req, res, next) => {
 
     if (
       req.user &&
-      (await bcrypt.compare(req.body.password, foundUser.password))
+      (await bcrypt.compare(req.body.password, req.user.password))
     ) {
       next();
     } else {
@@ -35,7 +35,7 @@ exports.unHash = async (req, res, next) => {
 
 exports.decrypt = async (req, res, next) => {
   try {
-    const token = req.headers("Authorization").replace("Bearer", "");
+    const token = req.header("Authorization").replace("Bearer", "");
     const decodedToken = await jwt.verify(token, process.env.SECRET);
     req.user = await User.findOne({ _id: decodedToken._id });
     if (req.user) {
